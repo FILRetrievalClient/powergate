@@ -6,6 +6,7 @@ import (
 	"io"
 	"math/big"
 
+	"github.com/filecoin-project/go-address"
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	"github.com/ipld/go-car"
@@ -24,11 +25,11 @@ type WalletManager interface {
 // PaychManager provides access to payment channels
 type PaychManager interface {
 	// List lists all payment channels involving the specified addresses
-	List(ctx context.Context, addrs ...string) ([]PaychInfo, error)
+	List(ctx context.Context, addrs ...address.Address) ([]PaychInfo, error)
 	// Create creates a new payment channel
-	Create(ctx context.Context, from string, to string, amount *big.Int) error
+	Create(ctx context.Context, from address.Address, to address.Address, amount uint64) (PaychInfo, cid.Cid, error)
 	// Redeem redeems a payment channel
-	Redeem(ctx context.Context, ch string) error
+	Redeem(ctx context.Context, ch address.Address) error
 }
 
 var (
